@@ -2,4 +2,4 @@
 
 set -e
 
-wvkbd-mobintl
+wvkbd-mobintl "$@"
