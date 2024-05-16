@@ -1,4 +1,7 @@
 ---
+config_builders:
+  - homestead.pi_config
+
 factories:
   - {name: homestead.RaspberryPi}
 tasks:

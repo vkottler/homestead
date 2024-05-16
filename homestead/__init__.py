@@ -4,7 +4,17 @@ A module implementing a raspberry pi synchronous task.
 
 # internal
 from runtimepy.net.arbiter import AppInfo
+from runtimepy.net.arbiter.config import ConfigObject
 from runtimepy.net.arbiter.task import ArbiterTask, TaskFactory
+
+
+def pi_config(data: ConfigObject) -> None:
+    """Sample config-builder method."""
+
+    # configure ui state to not use psutil stats
+    print(data)
+
+    del data
 
 
 class RaspberryPiTask(ArbiterTask):
