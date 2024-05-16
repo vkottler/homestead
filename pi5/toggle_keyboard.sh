@@ -2,8 +2,11 @@
 
 set -e
 
-PID=TODO
+PID=$(pgrep wvkbd)
 
-# one opens it, one closes it
-kill -SIGUSR1 $PID
-kill -SIGUSR2 $PID
+if [ -n "$PID" ]; then
+	# one opens it, one closes it
+	# kill -SIGUSR1 "$PID"
+	# kill -SIGUSR2 "$PID"
+	kill -SIGRTMIN "$PID"
+fi
