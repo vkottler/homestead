@@ -1,0 +1,5 @@
+---
+factories:
+  - {name: homestead.RaspberryPi}
+tasks:
+  - {name: pi, factory: RaspberryPi, period_s: 0.1}
