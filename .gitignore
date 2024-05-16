@@ -1,0 +1,13 @@
+.*_cache
+build
+venv*
+*.egg-info
+dist
+__pycache__
+datazen-out
+*.pyc
+tags
+mklocal
+docs
+compile_commands.json
+src
