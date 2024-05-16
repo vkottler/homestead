@@ -2,19 +2,16 @@
 A module implementing a raspberry pi synchronous task.
 """
 
+# built-in
+from os import sep
+from pathlib import Path
+
 # internal
 from runtimepy.net.arbiter import AppInfo
-from runtimepy.net.arbiter.config import ConfigObject
 from runtimepy.net.arbiter.task import ArbiterTask, TaskFactory
 
-
-def pi_config(data: ConfigObject) -> None:
-    """Sample config-builder method."""
-
-    # configure ui state to not use psutil stats
-    print(data)
-
-    del data
+SYS = Path(sep, "sys")
+SYS_CLASS = SYS.joinpath("class")
 
 
 class RaspberryPiTask(ArbiterTask):
@@ -25,7 +22,9 @@ class RaspberryPiTask(ArbiterTask):
 
         await super().init(app)
 
-        self.logger.info("Initialized.")
+        # Check for backlight devices.
+        path = SYS_CLASS.joinpath("backlight")
+        print(path)
 
     async def dispatch(self) -> bool:
         """Dispatch an iteration of this task."""

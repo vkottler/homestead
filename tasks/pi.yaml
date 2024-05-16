@@ -1,6 +1,6 @@
 ---
 config_builders:
-  - homestead.pi_config
+  - homestead.pi.config
 
 factories:
   - {name: homestead.RaspberryPi}
