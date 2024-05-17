@@ -44,7 +44,7 @@ async def setup_thermal_controllers(env: ChannelEnvironment) -> list[Thermal]:
 
     result = []
 
-    for inst in Thermal.instances(kind="cpu-thermal"):
+    for inst in Thermal.instances(attrs={"temp"}):
         await inst.init_env(env)
         result.append(inst)
 

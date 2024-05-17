@@ -6,7 +6,7 @@ and writing.
 # built-in
 from os import sep
 from pathlib import Path
-from typing import Iterator, Type, TypeVar
+from typing import Iterable, Iterator, Type, TypeVar
 
 # third-party
 from vcorelib import DEFAULT_ENCODING
@@ -30,13 +30,17 @@ class SysInstance(AsyncPollable):
         assert path.is_dir(), path
         self.path = path
 
+    def has_attr(self, *path: str) -> bool:
+        """Determine if this instance has a specific attribute file."""
+        return self.path.joinpath(*path).is_file()
+
     def attr_path(self, *path: str) -> Path:
         """Get a path to an attibute file."""
         candidate = self.path.joinpath(*path)
         assert candidate.is_file(), candidate
         return candidate
 
-    async def read(self, *path: str) -> str:
+    async def aread(self, *path: str) -> str:
         """Read the contents of an Attribute file."""
         return await aread_str(self.attr_path(*path))
 
@@ -57,28 +61,42 @@ class SysInstance(AsyncPollable):
     async def read_bool(self, *path: str) -> bool:
         """Attempt to read a boolean attribute."""
 
-        return await self.read(*path) == "1"
+        return await self.aread(*path) == "1"
 
     async def read_int(self, *path: str) -> int:
         """Attempt to read an integer attribute."""
 
-        return int(await self.read(*path))
+        return int(await self.aread(*path))
 
     @classmethod
-    def instances(cls: Type[T], *path: str, kind: str = None) -> Iterator[T]:
+    def instances(
+        cls: Type[T],
+        *path: str,
+        kind: Iterable[str] = None,
+        attrs: Iterable[str] = None,
+    ) -> Iterator[T]:
         """Iterate over instances found at some path."""
 
         candidate = SYS.joinpath(*cls.sys_path, *path)
         if candidate.is_dir():
-            for inst in candidate.iterdir():
-                if inst.is_dir():
+            for item in candidate.iterdir():
+                if item.is_dir():
+                    inst = cls(item)
+
                     # Check that the 'type' matches.
-                    if (
+                    do_yield = (
                         True
                         if kind is None
-                        else read_str(inst.joinpath("type")).strip() == kind
-                    ):
-                        yield cls(inst)
+                        else read_str(item.joinpath("type")).strip() in kind
+                    )
+
+                    # Check that desired attributes are present.
+                    if do_yield and attrs:
+                        for attr in attrs:
+                            do_yield &= inst.has_attr(attr)
+
+                    if do_yield:
+                        yield inst
 
 
 class SysClass(SysInstance):
