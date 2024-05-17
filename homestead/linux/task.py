@@ -3,39 +3,44 @@ A module implementing a Linux housekeeping task.
 """
 
 # built-in
-from os import sep
-from pathlib import Path
+import asyncio
 
 # third-party
 from runtimepy.net.arbiter import AppInfo
 from runtimepy.net.arbiter.task import ArbiterTask, TaskFactory
 
 # internal
-from homestead.linux.backlight import setup_backlight_controllers
 from homestead.linux.keyboard import setup_keyboard_toggle
-
-SYS = Path(sep, "sys")
-SYS_CLASS = SYS.joinpath("class")
+from homestead.linux.sys.backlight import setup_backlight_controllers
+from homestead.linux.sys.thermal import setup_thermal_controllers
+from homestead.util import AsyncPollable
 
 
 class LinuxTask(ArbiterTask):
     """A base raspberry pi housekeeping task."""
 
+    to_poll: list[AsyncPollable]
+
     async def init(self, app: AppInfo) -> None:
         """Initialize this task with application information."""
 
         await super().init(app)
+        self.to_poll = []
 
         # Register Linux integrations.
         await setup_keyboard_toggle(self.logger, self.env)
         await setup_backlight_controllers(self.env)
+        self.to_poll += await setup_thermal_controllers(self.env)
 
-        # cpu stats, memory stats
+        # get current process's stats (config option?)
+
+        # system cpu stats, memory stats? (config option?)
 
     async def dispatch(self) -> bool:
         """Dispatch an iteration of this task."""
 
-        # self.logger.info("Dispatched.")
+        # Poll integrations.
+        await asyncio.gather(*(x.poll() for x in self.to_poll))
 
         return True
 

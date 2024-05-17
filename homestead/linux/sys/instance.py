@@ -1,23 +1,25 @@
 """
-TODO.
+A module implementing an object-oriented interface for /sys attribute reading
+and writing.
 """
 
 # built-in
 from os import sep
 from pathlib import Path
-from typing import Iterator, Type, TypeVar, cast
+from typing import Iterator, Type, TypeVar
 
 # third-party
-import aiofiles
-
-# built-in
 from vcorelib import DEFAULT_ENCODING
 
-SYS = Path(sep, "sys")
+# internal
+from homestead.util import AsyncPollable, aread_str, read_str
+
+ROOT = Path(sep)
+SYS = ROOT.joinpath("sys")
 T = TypeVar("T", bound="SysInstance")
 
 
-class SysInstance:
+class SysInstance(AsyncPollable):
     """A base class for any /sys instance."""
 
     sys_path: list[str] = []
@@ -36,16 +38,12 @@ class SysInstance:
 
     async def read(self, *path: str) -> str:
         """Read the contents of an Attribute file."""
-        async with aiofiles.open(self.attr_path(*path), mode="r") as f:
-            contents = cast(str, await f.read())
-        return contents
+        return await aread_str(self.attr_path(*path))
 
     def write(self, data: str, *path: str) -> None:
         """Write data to an attribute file."""
 
-        with open(
-            self.attr_path(*path), mode="w", encoding=DEFAULT_ENCODING
-        ) as f:
+        with self.attr_path(*path).open("w", encoding=DEFAULT_ENCODING) as f:
             f.write(data)
 
     def write_bool(self, value: bool, *path: str) -> None:
@@ -67,11 +65,23 @@ class SysInstance:
         return int(await self.read(*path))
 
     @classmethod
-    def instances(cls: Type[T], *path: str) -> Iterator[T]:
+    def instances(cls: Type[T], *path: str, kind: str = None) -> Iterator[T]:
         """Iterate over instances found at some path."""
 
         candidate = SYS.joinpath(*cls.sys_path, *path)
         if candidate.is_dir():
             for inst in candidate.iterdir():
                 if inst.is_dir():
-                    yield cls(inst)
+                    # Check that the 'type' matches.
+                    if (
+                        True
+                        if kind is None
+                        else read_str(inst.joinpath("type")).strip() == kind
+                    ):
+                        yield cls(inst)
+
+
+class SysClass(SysInstance):
+    """A class for Linux devices under /sys/class."""
+
+    sys_path = ["class"]
