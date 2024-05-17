@@ -29,8 +29,8 @@ class LinuxTask(ArbiterTask):
 
         # Register Linux integrations.
         await setup_keyboard_toggle(self.logger, self.env)
-        await setup_backlight_controllers(self.env)
-        self.to_poll += await setup_thermal_controllers(self.env)
+        await setup_backlight_controllers(self.logger, self.env)
+        self.to_poll += await setup_thermal_controllers(self.logger, self.env)
 
         # get current process's stats (config option?)
 

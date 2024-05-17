@@ -5,6 +5,7 @@ A module implementing a sys-instance interface for thermal devices.
 # third-party
 from runtimepy.channel.environment import ChannelEnvironment
 from runtimepy.primitives import Float
+from vcorelib.logging import LoggerType
 
 # internal
 from homestead.linux.sys.instance import SysClass
@@ -39,12 +40,14 @@ class Thermal(SysClass):
         self.temp.value = raw_to_fahrenheit(await self.raw_temp())
 
 
-async def setup_thermal_controllers(env: ChannelEnvironment) -> list[Thermal]:
+async def setup_thermal_controllers(
+    logger: LoggerType, env: ChannelEnvironment
+) -> list[Thermal]:
     """Check for backlight devices."""
 
     result = []
 
-    for inst in Thermal.instances(attrs={"temp"}):
+    for inst in Thermal.instances(logger, attrs={"temp"}):
         await inst.init_env(env)
         result.append(inst)
 

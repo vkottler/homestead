@@ -5,6 +5,7 @@ A module implementing interfaces related to backlight controllers for Linux.
 # third-party
 from runtimepy.channel.environment import ChannelEnvironment
 from runtimepy.primitives import Uint8
+from vcorelib.logging import LoggerType
 
 # internal
 from homestead.linux.sys.instance import SysClass
@@ -46,8 +47,10 @@ class Backlight(SysClass):
             brightness.register_callback(brightness_handler)
 
 
-async def setup_backlight_controllers(env: ChannelEnvironment) -> None:
+async def setup_backlight_controllers(
+    logger: LoggerType, env: ChannelEnvironment
+) -> None:
     """Check for backlight devices."""
 
-    for inst in Backlight.instances():
+    for inst in Backlight.instances(logger):
         await inst.init_env(env)
