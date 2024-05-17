@@ -1,0 +1,8 @@
+---
+config_builders:
+  - homestead.util.disable_ui_psutil
+
+factories:
+  - {name: homestead.linux.task.Linux}
+tasks:
+  - {name: linux, factory: Linux, period_s: 0.1}
