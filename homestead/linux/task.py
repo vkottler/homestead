@@ -11,6 +11,7 @@ from runtimepy.net.arbiter import AppInfo
 from runtimepy.net.arbiter.task import ArbiterTask, TaskFactory
 
 # internal
+from homestead.linux.backlight import setup_backlight_controllers
 from homestead.linux.keyboard import setup_keyboard_toggle
 
 SYS = Path(sep, "sys")
@@ -25,12 +26,9 @@ class LinuxTask(ArbiterTask):
 
         await super().init(app)
 
-        # Look for on-screen keyboard process to send signals to.
+        # Register Linux integrations.
         await setup_keyboard_toggle(self.logger, self.env)
-
-        # Check for backlight devices.
-        path = SYS_CLASS.joinpath("backlight")
-        print(path)
+        await setup_backlight_controllers(self.env)
 
         # cpu stats, memory stats
 

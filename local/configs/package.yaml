@@ -4,4 +4,9 @@ version: "{{major}}.{{minor}}.{{patch}}"
 description: A repository for last-mile home automation integration.
 
 requirements:
+  - aiofiles
   - runtimepy>=4.4.5
+
+mypy_local: |
+  [mypy-aiofiles.*]
+  ignore_missing_imports = True
