@@ -6,7 +6,7 @@ https://www.kernel.org/doc/Documentation/filesystems/sysfs.txt
 
 # third-party
 from runtimepy.channel.environment import ChannelEnvironment
-from runtimepy.primitives import Bool, Uint8
+from runtimepy.primitives import Uint8
 
 # internal
 from homestead.linux.sys.instance import SysInstance
@@ -29,15 +29,15 @@ class Backlight(SysClass):
         # enter namespace for inst name
 
         # Setup 'bl_power'.
-        name = "bl_power"
-        prim = Bool(value=await self.read_bool(name))
-        env.bool_channel(name, kind=prim, commandable=True)
-
-        def bl_power_handler(_: bool, curr: bool) -> None:
-            """Handle setting the 'bl_power' attribute."""
-            self.write_bool(curr, name)
-
-        prim.register_callback(bl_power_handler)
+        # name = "bl_power"
+        # prim = Bool(value=await self.read_bool(name))
+        # env.bool_channel(name, kind=prim, commandable=True)
+        #
+        # def bl_power_handler(_: bool, curr: bool) -> None:
+        #     """Handle setting the 'bl_power' attribute."""
+        #     self.write_bool(curr, name)
+        #
+        # prim.register_callback(bl_power_handler)
 
         # How should this be used?
         # max_brightness = 255
