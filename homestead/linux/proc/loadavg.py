@@ -61,7 +61,7 @@ class Loadavg(ProcFile):
 async def setup_loadavg(
     logger: LoggerType, env: ChannelEnvironment
 ) -> Loadavg:
-    """Check for backlight devices."""
+    """Create a loadavg interface."""
 
     result = Loadavg(logger, "loadavg")
     await result.init_env(env)

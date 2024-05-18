@@ -23,3 +23,7 @@ class ProcFile(LoggerMixin, AsyncPollable):
     async def aread(self) -> str:
         """Read the contents of an Attribute file."""
         return await aread_str(self.path)
+
+    async def lines(self) -> list[str]:
+        """Get file lines."""
+        return (await self.aread()).split("\n")[:-1]
