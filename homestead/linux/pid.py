@@ -20,6 +20,6 @@ async def pgrep(
 
     result = await run_command(logger, entry, pattern, stdout=PIPE)
     if result.stdout:
-        pid = int(result.stdout.decode().strip())
+        pid = int(result.stdout.decode().rstrip())
 
     return pid

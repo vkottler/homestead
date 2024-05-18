@@ -4,7 +4,6 @@ and writing.
 """
 
 # built-in
-from os import sep
 from pathlib import Path
 from typing import Iterable, Iterator, Type, TypeVar
 
@@ -13,10 +12,8 @@ from vcorelib import DEFAULT_ENCODING
 from vcorelib.logging import LoggerMixin, LoggerType
 
 # internal
-from homestead.util import AsyncPollable, aread_str, read_str
+from homestead.util import SYS, AsyncPollable, aread_str, read_str
 
-ROOT = Path(sep)
-SYS = ROOT.joinpath("sys")
 T = TypeVar("T", bound="SysInstance")
 
 
@@ -54,7 +51,7 @@ class SysInstance(LoggerMixin, AsyncPollable):
                 "w", encoding=DEFAULT_ENCODING
             ) as f:
                 f.write(data)
-        except PermissionError as exc:
+        except (PermissionError, OSError) as exc:
             self.logger.exception("Couldn't write attribute:", exc_info=exc)
 
     def write_bool(self, value: bool, *path: str) -> None:
@@ -95,7 +92,7 @@ class SysInstance(LoggerMixin, AsyncPollable):
                     do_yield = (
                         True
                         if kind is None
-                        else read_str(item.joinpath("type")).strip() in kind
+                        else read_str(item.joinpath("type")).rstrip() in kind
                     )
 
                     # Check that desired attributes are present.

@@ -11,6 +11,7 @@ from runtimepy.net.arbiter.task import ArbiterTask, TaskFactory
 
 # internal
 from homestead.linux.keyboard import setup_keyboard_toggle
+from homestead.linux.proc.loadavg import setup_loadavg
 from homestead.linux.sys.backlight import setup_backlight_controllers
 from homestead.linux.sys.thermal import setup_thermal_controllers
 from homestead.util import AsyncPollable
@@ -31,10 +32,13 @@ class LinuxTask(ArbiterTask):
         await setup_keyboard_toggle(self.logger, self.env)
         await setup_backlight_controllers(self.logger, self.env)
         self.to_poll += await setup_thermal_controllers(self.logger, self.env)
+        self.to_poll.append(await setup_loadavg(self.logger, self.env))
 
         # get current process's stats (config option?)
 
         # system cpu stats, memory stats? (config option?)
+
+        # network interface stats: /sys/class/net/<inst>/statistics/*
 
     async def dispatch(self) -> bool:
         """Dispatch an iteration of this task."""

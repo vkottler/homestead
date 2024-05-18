@@ -3,6 +3,7 @@ A module implementing generic runtime-configuration utilities.
 """
 
 # built-in
+from os import sep
 from pathlib import Path
 from typing import cast
 
@@ -12,6 +13,10 @@ import aiofiles
 # internal
 from runtimepy.net.arbiter.config import ConfigObject
 from vcorelib import DEFAULT_ENCODING
+
+ROOT = Path(sep)
+SYS = ROOT.joinpath("sys")
+PROC = ROOT.joinpath("proc")
 
 
 def disable_ui_psutil(data: ConfigObject) -> None:
