@@ -13,3 +13,5 @@ compile_commands.json
 src
 workspace
 out.txt
+*.FCBak
+*.bkp
