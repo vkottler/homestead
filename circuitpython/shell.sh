@@ -1,12 +1,12 @@
 #!/bin/bash
 
 HOMESTEAD=$(git rev-parse --show-toplevel)
-CWD="$HOMESTEAD/pi5"
+CWD="$HOMESTEAD/circuitpython"
 # shellcheck source=common.sh
 . "$CWD/common.sh"
 
-safe_pushd "$HOMESTEAD"
+PORT="$(get_serial_port)"
 
-mk rh
+tio "$PORT"
 
-safe_popd
+EXIT=0

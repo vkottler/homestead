@@ -1,12 +1,11 @@
 #!/bin/bash
 
 HOMESTEAD=$(git rev-parse --show-toplevel)
-CWD="$HOMESTEAD/pi5"
+CWD="$HOMESTEAD/circuitpython"
 # shellcheck source=common.sh
 . "$CWD/common.sh"
 
-safe_pushd "$HOMESTEAD"
+# Reboot RP2040 bootloader to application.
+picotool reboot -a
 
-mk rh
-
-safe_popd
+EXIT=0
