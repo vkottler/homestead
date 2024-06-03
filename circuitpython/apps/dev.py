@@ -11,6 +11,12 @@ from digitalio import DigitalInOut, Direction  # type: ignore
 led = DigitalInOut(board.LED)
 led.direction = Direction.OUTPUT
 
+# relay1 = DigitalInOut(board.GP14)
+# relay1.direction = Direction.OUTPUT
+
+# relay2 = DigitalInOut(board.GP15)
+# relay2.direction = Direction.OUTPUT
+
 
 def main() -> None:
     """Application entry."""
