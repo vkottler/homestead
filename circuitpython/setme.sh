@@ -1,0 +1,2 @@
+APP=dev
+test $APP
