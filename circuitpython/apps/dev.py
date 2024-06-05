@@ -23,7 +23,7 @@ def main() -> None:
 
     iteration = 0
 
-    while True:
+    for _ in range(3):
         led.value = not led.value
         time.sleep(0.1)
         iteration += 1

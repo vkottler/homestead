@@ -6,7 +6,7 @@ CWD="$HOMESTEAD/circuitpython"
 . "$CWD/common.sh"
 
 set -x
-cp "$APP_SRC" $CIRCUITPY/code.py
+cp "$CWD/apps/repl.py" $CIRCUITPY/repl.py
 set +x
 
 EXIT=0
