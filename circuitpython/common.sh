@@ -5,6 +5,9 @@
 APP_SRC=$CWD/apps/$APP.py
 test "$APP_SRC"
 
+REPL_SRC="$CWD/apps/$REPL_APP.py"
+test "$REPL_SRC"
+
 EMPTY="$CWD/apps/empty.py"
 test "$EMPTY"
 
