@@ -5,6 +5,6 @@ CWD="$HOMESTEAD/circuitpython"
 # shellcheck source=common.sh
 . "$CWD/common.sh"
 
-update_repl "$CWD/apps/repl.py"
+update_repl "$EMPTY"
 
 EXIT=0
