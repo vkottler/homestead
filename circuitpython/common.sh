@@ -18,10 +18,12 @@ update_code() {
 	set -x
 	cp "$1" $CIRCUITPY/code.py
 	set +x
+	sync
 }
 
 update_repl() {
 	set -x
 	cp "$1" $CIRCUITPY/repl.py
 	set +x
+	sync
 }

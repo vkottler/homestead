@@ -1,5 +1,17 @@
 ---
 config:
   localhost: true
+
 port_overrides:
   runtimepy_http_server: 8000
+  udp_telemetry: 7001
+
+ports:
+  - {name: udp_telemetry, type: udp}
+
+clients:
+  # Eventually switch this for a real server implementation.
+  - factory: udp_echo
+    name: telemetry_server
+    kwargs:
+      local_addr: [0.0.0.0, "$udp_telemetry"]
