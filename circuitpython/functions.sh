@@ -4,3 +4,7 @@ get_serial_port() {
 	echo "Serial port selected: '$result'." >&2
 	echo "$result"
 }
+
+run_mk() {
+	mk -C "$HOMESTEAD" "$@"
+}

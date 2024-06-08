@@ -5,8 +5,6 @@ CWD="$HOMESTEAD/circuitpython"
 # shellcheck source=common.sh
 . "$CWD/common.sh"
 
-PORT="$(get_serial_port)"
-
-tio "$PORT"
+run_mk rh-serial
 
 EXIT=0
