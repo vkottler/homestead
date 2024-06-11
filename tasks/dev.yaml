@@ -9,7 +9,18 @@ port_overrides:
 ports:
   - {name: udp_telemetry, type: udp}
 
+factories:
+  - {name: homestead.cots.owon.OwonConn}
+  - {name: homestead.cots.teledyne.TeledyneConn}
+
 clients:
+  - factory: owon_conn
+    name: psu
+    kwargs: {host: owon1, port: 3000}
+  - factory: teledyne_conn
+    name: eload
+    kwargs: {host: teledyne1, port: 5025}
+
   # Eventually switch this for a real server implementation.
   - factory: udp_echo
     name: telemetry_server
