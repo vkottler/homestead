@@ -3,6 +3,7 @@ A module implementing a Teledyne electronic load SCPI driver.
 """
 
 # third-party
+from runtimepy.net.arbiter.info import AppInfo
 from runtimepy.net.arbiter.tcp import TcpConnectionFactory
 
 # internal
@@ -22,6 +23,17 @@ class TeledyneConnection(ScpiConnection):
             await self.send_command("*ESR", log=True, query=True)
 
         return result
+
+
+async def test(app: AppInfo) -> int:
+    """Run a simple test involving a Teledyne bench tool."""
+
+    eload = app.single(kind=TeledyneConnection)
+
+    # can do things with eload
+    await eload.send_command("*IDN", log=True, query=True)
+
+    return 0
 
 
 class TeledyneConn(TcpConnectionFactory[TeledyneConnection]):
