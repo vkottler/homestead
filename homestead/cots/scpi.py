@@ -60,7 +60,7 @@ class ScpiConnection(TcpConnection):
                         self.message_queue.get(), timeout
                     )
                     if log:
-                        self.logger.info("(%s) %s", command, result)
+                        self.logger.info("(%s) %s", command, result.rstrip())
                 except asyncio.TimeoutError:
                     pass
 

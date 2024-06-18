@@ -1,5 +1,5 @@
-APP=dev
+APP=empty
 test $APP
 
-REPL_APP=wifi_dev
+REPL_APP=airq_dev
 test $REPL_APP
