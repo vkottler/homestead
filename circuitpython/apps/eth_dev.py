@@ -15,7 +15,10 @@ import digitalio  # type: ignore
 print("Wiznet5k WebClient Test")
 
 # Reset W5x00 first
-ethernetRst = digitalio.DigitalInOut(board.W5500_RST)
+ethernetRst = digitalio.DigitalInOut(
+    board.W5500_RST  # pylint: disable=no-member
+)
+
 ethernetRst.direction = digitalio.Direction.OUTPUT
 ethernetRst.value = False
 time.sleep(1)
@@ -24,7 +27,7 @@ ethernetRst.value = True
 # Initialize ethernet interface with DHCP
 eth = WIZNET5K(
     busio.SPI(board.SCK, MOSI=board.MOSI, MISO=board.MISO),
-    digitalio.DigitalInOut(board.W5500_CS),
+    digitalio.DigitalInOut(board.W5500_CS),  # pylint: disable=no-member
     is_dhcp=True,
     debug=False,
 )

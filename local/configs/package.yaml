@@ -8,6 +8,7 @@ requirements:
   - runtimepy>=4.4.5
 
 dev_requirements:
+  - Adafruit-Blinka
   - circup
 
 mypy_local: |
