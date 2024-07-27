@@ -7,6 +7,9 @@ requirements:
   - aiofiles
   - runtimepy>=4.4.5
 
+dev_requirements:
+  - circup
+
 mypy_local: |
   [mypy-aiofiles.*]
   ignore_missing_imports = True

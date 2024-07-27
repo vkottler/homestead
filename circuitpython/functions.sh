@@ -8,3 +8,8 @@ get_serial_port() {
 run_mk() {
 	mk -C "$HOMESTEAD" "$@"
 }
+
+CIRCUP="$HOMESTEAD/venv/bin/circup"
+if ! [ -f "$CIRCUP" ]; then
+	run_mk venv
+fi
