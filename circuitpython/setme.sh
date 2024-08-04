@@ -1,5 +1,5 @@
 APP=empty
 test $APP
 
-REPL_APP=airq_dev
+REPL_APP=eth_dev
 test $REPL_APP

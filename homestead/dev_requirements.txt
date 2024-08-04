@@ -9,3 +9,5 @@ yambs
 vmklib
 sphinx
 sphinx-book-theme
+Adafruit-Blinka
+circup
