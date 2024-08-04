@@ -5,5 +5,6 @@ includes:
   - pi.yaml
   - dev.yaml
 
+# - runtimepy.net.apps.wait_for_stop
 app:
-  - runtimepy.net.apps.wait_for_stop
+  - [homestead.cots.owon.test, homestead.cots.teledyne.test]

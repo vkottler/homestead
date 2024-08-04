@@ -1,4 +1,4 @@
-APP=dev
+APP=empty
 test $APP
 
 REPL_APP=eth_dev
