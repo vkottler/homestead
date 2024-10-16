@@ -7,11 +7,9 @@ from pathlib import Path
 from typing import Iterator, Optional
 
 # third-party
+from experimental_lowqa.prompts import manual_select
 from runtimepy.net.arbiter.info import AppInfo
 from vcorelib.asyncio.cli import run_command
-
-# internal
-from mklocal.prompts import manual_select
 
 DEV_SERIAL = Path("/dev/serial")
 
