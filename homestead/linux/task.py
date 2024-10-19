@@ -27,6 +27,9 @@ class LinuxTask(ArbiterTask, LogCaptureMixin):
 
     to_poll: list[AsyncPollable]
 
+    # Monitoring the system log.
+    safe_to_log = False
+
     async def init(self, app: AppInfo) -> None:
         """Initialize this task with application information."""
 
