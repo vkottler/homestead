@@ -4,8 +4,11 @@ A module implementing a Linux housekeeping task.
 
 # built-in
 import asyncio
+import os
+from pathlib import Path
 
 # third-party
+from runtimepy.mixins.logging import LogCaptureMixin
 from runtimepy.net.arbiter import AppInfo
 from runtimepy.net.arbiter.task import ArbiterTask, TaskFactory
 
@@ -19,7 +22,7 @@ from homestead.linux.sys.thermal import setup_thermal_controllers
 from homestead.util import AsyncPollable
 
 
-class LinuxTask(ArbiterTask):
+class LinuxTask(ArbiterTask, LogCaptureMixin):
     """A base raspberry pi housekeeping task."""
 
     to_poll: list[AsyncPollable]
@@ -38,6 +41,11 @@ class LinuxTask(ArbiterTask):
         self.to_poll.append(await setup_uptime(self.logger, self.env))
         self.to_poll.append(await setup_stat(self.logger, self.env))
 
+        # System log monitoring.
+        await self.init_log_capture(
+            app.stack, [("info", Path(os.sep, "var", "log", "syslog"))]
+        )
+
         # get current process's stats (config option?)
 
         # system cpu stats (Stat interface), memory stats? (config option?)
@@ -48,7 +56,9 @@ class LinuxTask(ArbiterTask):
         """Dispatch an iteration of this task."""
 
         # Poll integrations.
-        await asyncio.gather(*(x.poll() for x in self.to_poll))
+        await asyncio.gather(
+            self.dispatch_log_capture(), *(x.poll() for x in self.to_poll)
+        )
 
         return True
 
