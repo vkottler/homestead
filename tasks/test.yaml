@@ -4,6 +4,11 @@ includes_left:
 includes:
   - linux.yaml
 
+factories:
+  - {name: homestead.libre_embedded.null.NullStruct}
+structs:
+  - {name: "null", factory: NullStruct}
+
 port_overrides:
   runtimepy_http_server: 8000
 app:
