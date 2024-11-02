@@ -6,6 +6,7 @@ A module implementing an interface for using /proc/stat data at runtime.
 from runtimepy.channel.environment import ChannelEnvironment
 from runtimepy.primitives import Float
 from vcorelib.logging import LoggerType
+from vcorelib.math.analysis.average import MovingAverage
 
 # internal
 from homestead.linux.proc.file import ProcFile
@@ -21,6 +22,8 @@ class Stat(ProcFile):
     non_idle_idx = [1, 2, 3, 5, 6, 7, 8, 9, 10]
 
     util: dict[str, Float]
+    util_avg: dict[str, Float]
+    averages: dict[str, MovingAverage]
 
     async def init_env(self, env: ChannelEnvironment) -> None:
         """Initialize a channel environment with this instance."""
@@ -33,13 +36,18 @@ class Stat(ProcFile):
 
         # Set up CPU utilization channels.
         self.util = {}
+        self.util_avg = {}
+        self.averages = {}
         for line in await self.lines():
             parts = line.split()
             label = parts[0]
             if label.startswith("cpu"):
                 self.util[label] = Float()
+                self.util_avg[label] = Float()
+                self.averages[label] = MovingAverage()
                 with env.names_pushed(label):
                     env.float_channel("percent", kind=self.util[label])
+                    env.float_channel("percent.avg", kind=self.util_avg[label])
 
     def update_counts(self, line: list[str]) -> None:
         """Update CPU utilization tracking."""
@@ -63,10 +71,11 @@ class Stat(ProcFile):
         idle_change = idle - prev_idle
         non_idle_change = non_idle - prev_non_idle
 
-        # Rolling average at some point?
         total = idle_change + non_idle_change
         if total:
-            self.util[cpu].value = (non_idle_change / total) * 100
+            raw = (non_idle_change / total) * 100
+            self.util[cpu].value = raw
+            self.util_avg[cpu].value = self.averages[cpu](raw)
 
     async def poll(self) -> None:
         """Poll this instance."""

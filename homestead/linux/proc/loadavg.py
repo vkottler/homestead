@@ -46,16 +46,16 @@ class Loadavg(ProcFile):
         """Poll this instance."""
 
         data = (await self.aread()).rstrip().split()
+        if len(data) >= 5:
+            self.one_minute.value = float(data[0])
+            self.five_minute.value = float(data[1])
+            self.fifteen_minute.value = float(data[2])
 
-        self.one_minute.value = float(data[0])
-        self.five_minute.value = float(data[1])
-        self.fifteen_minute.value = float(data[2])
+            runnable, total = data[3].split("/")
+            self.runnable.value = int(runnable)
+            self.total.value = int(total)
 
-        runnable, total = data[3].split("/")
-        self.runnable.value = int(runnable)
-        self.total.value = int(total)
-
-        self.newest_pid.value = int(data[4])
+            self.newest_pid.value = int(data[4])
 
 
 async def setup_loadavg(

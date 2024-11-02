@@ -2,9 +2,9 @@
 includes_left:
   - package://runtimepy/server.yaml
 includes:
-  - pi.yaml
-  - dev.yaml
+  - linux.yaml
+  # - dev.yaml
 
-# - runtimepy.net.apps.wait_for_stop
+#   - [homestead.cots.owon.test, homestead.cots.teledyne.test]
 app:
-  - [homestead.cots.owon.test, homestead.cots.teledyne.test]
+  - runtimepy.net.apps.wait_for_stop

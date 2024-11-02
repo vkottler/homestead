@@ -15,6 +15,7 @@ from runtimepy.net.arbiter.task import ArbiterTask, TaskFactory
 # internal
 from homestead.linux.keyboard import setup_keyboard_toggle
 from homestead.linux.proc.loadavg import setup_loadavg
+from homestead.linux.proc.meminfo import setup_meminfo
 from homestead.linux.proc.stat import setup_stat
 from homestead.linux.proc.uptime import setup_uptime
 from homestead.linux.sys.backlight import setup_backlight_controllers
@@ -43,17 +44,16 @@ class LinuxTask(ArbiterTask, LogCaptureMixin):
         self.to_poll.append(await setup_loadavg(self.logger, self.env))
         self.to_poll.append(await setup_uptime(self.logger, self.env))
         self.to_poll.append(await setup_stat(self.logger, self.env))
+        self.to_poll.append(await setup_meminfo(self.logger, self.env))
+
+        # get current process's stats (config option?)
+
+        # network interface stats: /sys/class/net/<inst>/statistics/*
 
         # System log monitoring.
         await self.init_log_capture(
             app.stack, [("info", Path(os.sep, "var", "log", "syslog"))]
         )
-
-        # get current process's stats (config option?)
-
-        # system cpu stats (Stat interface), memory stats? (config option?)
-
-        # network interface stats: /sys/class/net/<inst>/statistics/*
 
     async def dispatch(self) -> bool:
         """Dispatch an iteration of this task."""

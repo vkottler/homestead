@@ -1,2 +1,1 @@
-aiofiles
-runtimepy>=4.4.5
+runtimepy>=5.7.10

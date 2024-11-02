@@ -4,8 +4,7 @@ version: "{{major}}.{{minor}}.{{patch}}"
 description: A repository for last-mile home automation integration.
 
 requirements:
-  - aiofiles
-  - runtimepy>=4.4.5
+  - runtimepy>=5.7.10
 
 dev_requirements:
   - Adafruit-Blinka

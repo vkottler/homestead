@@ -5,14 +5,11 @@ A module implementing generic runtime-configuration utilities.
 # built-in
 from os import sep
 from pathlib import Path
-from typing import cast
-
-# third-party
-import aiofiles
 
 # internal
 from runtimepy.net.arbiter.config import ConfigObject
 from runtimepy.net.server import RuntimepyServerConnection
+from runtimepy.util import read_binary
 from vcorelib import DEFAULT_ENCODING
 
 ROOT = Path(sep)
@@ -62,10 +59,7 @@ def read_str(path: Path) -> str:
 
 async def aread_str(path: Path) -> str:
     """Read String file contents."""
-
-    async with aiofiles.open(path, mode="r") as f:
-        contents = cast(str, await f.read())
-    return contents
+    return (await read_binary(path)).decode()
 
 
 class AsyncPollable:
