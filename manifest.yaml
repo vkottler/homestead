@@ -7,8 +7,8 @@ params:
 
 compiles:
   - name: local
-    # variables:
-    #   - local/variables
+    variables:
+      - local/variables
     configs:
       - local/configs
 
@@ -20,6 +20,6 @@ includes:
 groups:
   - name: all
     dependencies:
-      - groups-base-project
+      - groups-python-package-renders
       - groups-license
       - groups-funding
